@@ -1,24 +1,23 @@
 version: '3.8'
-
 services:
   backend:
     build: ./backend
-    restart: unless-stopped
     ports:
       - "8000:8000"
-    mem_limit: 450m
-    cpus: '0.5'
-    environment:
-      - WEB_CONCURRENCY=1
+    networks:
+      - petro-network
 
   frontend:
     build: ./frontend
-    restart: unless-stopped
     ports:
       - "8501:8501"
-    mem_limit: 450m
-    cpus: '0.5'
+    depends_on:
+      - backend
+    environment:
+      - API_URL=http://backend:8000
+    networks:
+      - petro-network
 
 networks:
-  default:
+  petro-network:
     driver: bridge
