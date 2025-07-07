@@ -1,0 +1,30 @@
+{
+    "family": "petrolytics-backend",
+    "executionRoleArn": "arn:aws:iam::910606336737:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "containerDefinitions": [
+        {
+            "name": "backend",
+            "image": "910606336737.dkr.ecr.us-east-1.amazonaws.com/petrolytics-backend:latest",
+            "portMappings": [
+                {
+                    "containerPort": 8000,
+                    "hostPort": 8000,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "secrets": [
+                {
+                    "name": "GOOGLE_API_KEY",
+                    "valueFrom": "petrolytics-google-api-key"
+                }
+            ]
+        }
+    ],
+    "requiresCompatibilities": [
+        "EC2"
+    ],
+    "cpu": "256",
+    "memory": "512"
+}

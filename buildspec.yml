@@ -1,0 +1,17 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR Public...
+      - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
+  build:
+    commands:
+      - echo Building the Backend image...
+      - docker build -t public.ecr.aws/`aws sts get-caller-identity --query "Account" --output text`/petrolytics-backend:latest ./backend
+      - echo Building the Frontend image...
+      - docker build -t public.ecr.aws/`aws sts get-caller-identity --query "Account" --output text`/petrolytics-frontend:latest ./frontend
+  post_build:
+    commands:
+      - echo Pushing the Docker images to ECR Public...
+      - docker push public.ecr.aws/`aws sts get-caller-identity --query "Account" --output text`/petrolytics-backend:latest
+      - docker push public.ecr.aws/`aws sts get-caller-identity --query "Account" --output text`/petrolytics-frontend:latest

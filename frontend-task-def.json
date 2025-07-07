@@ -1,0 +1,28 @@
+{
+    "family": "petrolytics-frontend",
+    "networkMode": "awsvpc",
+    "containerDefinitions": [
+        {
+            "name": "frontend",
+            "image": "910606336737.dkr.ecr.us-east-1.amazonaws.com/petrolytics-frontend:latest",
+            "portMappings": [
+                {
+                    "containerPort": 8501,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "API_URL",
+                    "value": "http://127.0.0.1:8000"
+                }
+            ]
+        }
+    ],
+    "requiresCompatibilities": [
+        "EC2"
+    ],
+    "cpu": "256",
+    "memory": "512"
+}

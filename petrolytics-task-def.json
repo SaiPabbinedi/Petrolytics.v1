@@ -1,0 +1,57 @@
+{
+    "family": "petrolytics-app",
+    "executionRoleArn": "arn:aws:iam::910606336737:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "containerDefinitions": [
+        {
+            "name": "backend",
+            "image": "public.ecr.aws/910606336737/petrolytics-backend:latest",
+            "cpu": 128,
+            "memory": 256,
+            "essential": true,
+            "portMappings": [
+                {
+                    "containerPort": 8000,
+                    "hostPort": 8000,
+                    "protocol": "tcp"
+                }
+            ],
+            "secrets": [
+                {
+                    "name": "GOOGLE_API_KEY",
+                    "valueFrom": "petrolytics-google-api-key"
+                }
+            ]
+        },
+        {
+            "name": "frontend",
+            "image": "public.ecr.aws/910606336737/petrolytics-frontend:latest",
+            "cpu": 128,
+            "memory": 640,
+            "essential": true,
+            "portMappings": [
+                {
+                    "containerPort": 8501,
+                    "protocol": "tcp"
+                }
+            ],
+            "environment": [
+                {
+                    "name": "API_URL",
+                    "value": "http://127.0.0.1:8000"
+                }
+            ],
+            "dependsOn": [
+                {
+                  "containerName": "backend",
+                  "condition": "START"
+                }
+            ]
+        }
+    ],
+    "requiresCompatibilities": [
+        "EC2"
+    ],
+    "cpu": "256",
+    "memory": "896"
+}
