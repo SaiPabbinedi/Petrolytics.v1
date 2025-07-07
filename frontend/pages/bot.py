@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import requests
 import pandas as pd
@@ -21,7 +22,7 @@ st.markdown(hide_buttons_css, unsafe_allow_html=True)
 
 st.title("✨ Gemini Chatbot")
 
-FASTAPI_URL = "http://127.0.0.1:8000/chat/"
+FASTAPI_URL = os.getenv("API_URL", "http://127.0.0.1:8000") + "/chat/"
 
 if "messages" not in st.session_state:
     st.session_state.messages = [
